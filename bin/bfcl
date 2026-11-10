@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# bfcl 命令包装（Git Bash / WSL 用）
+#
+# 存在的理由：本机是用「wheel 纯解包」装的环境，zipfile 解包不会生成
+# console_scripts，所以 site-packages 里没有 bfcl.exe。这里补一个等价入口，
+# 同时把两个运行时补丁带上（见 tools/bfcl_cli.py）。
+#
+# 装到 PATH 里就能直接用官方命令形式：
+#   export PATH="D:/bfcl-repro/bin:$PATH"
+#   bfcl models | grep -i deepseek
+#   bfcl generate --model DeepSeek-V4.1-Flash-FC --test-category simple_python --num-threads 8
+set -euo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -W)"
+ROOT="$(cd "$HERE/.." && pwd -W)"
+
+# BFCL_PROJECT_ROOT 必须是 Windows 风格路径，否则 .env 会被解析成 \d\... 而静默丢失
+export BFCL_PROJECT_ROOT="${BFCL_PROJECT_ROOT:-$ROOT}"
+
+BFCL_PYTHON="${BFCL_PYTHON:-D:/py项目uv环境/bfcl/.venv3/Scripts/python.exe}"
+
+exec "$BFCL_PYTHON" "$ROOT/tools/bfcl_cli.py" "$@"

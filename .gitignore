@@ -1,0 +1,27 @@
+# 运行凭证
+.env
+
+# Python
+.venv/
+.venv*/
+__pycache__/
+*.pyc
+
+# BFCL 运行时产物
+.file_locks/
+*.local.log
+gen.log
+
+# 运行日志：本机全局 gitignore 忽略了 *.log（见 ~/.gitignore-global），
+# 但下面两个是跑分证据 —— run_full.log 是终端截图的数据源
+# （tools/make_result_card.py 读它），mt_eval.log 含多轮那次的 Accuracy 输出。
+# 仓库级规则优先于全局规则，所以在这里显式放行。
+!run_full.log
+!mt_eval.log
+
+# 编辑器
+.idea/
+.vscode/
+
+# 截图中间产物（由 tools/make_result_card.py 生成，可随时重建）
+docs/_result_card.html
